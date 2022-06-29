@@ -1,4 +1,4 @@
-# Readme
+# MatEasy API
 
 How to run the app.
 
