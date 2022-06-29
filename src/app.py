@@ -6,8 +6,7 @@ swagger = Swagger(app)
 
 @app.route('/api/math-translation', methods=["POST"])
 @swag_from('./config/swagger.yml')
-def testpost():
-
+def mathtranslation():
     if not request.is_json:
         return jsonify({"error": "Missing JSON in request"}), 400
     
