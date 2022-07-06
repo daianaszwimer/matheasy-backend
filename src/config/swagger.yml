@@ -1,0 +1,12 @@
+Example
+---
+parameters:
+  - name: text
+    type: string
+    required: true
+definitions:
+  Text:
+    type: string
+responses:
+  200:
+    description: Example
