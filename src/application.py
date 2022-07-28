@@ -1,10 +1,16 @@
+from email.mime import application
 from flask import Flask, request, jsonify
 from flasgger import swag_from, Swagger
 
-app = Flask(__name__)
-swagger = Swagger(app)
+application = Flask(__name__)
+swagger = Swagger(application)
 
-@app.route('/api/math-translation', methods=["POST"])
+@application.route('/api/ping', methods=["GET"])
+@swag_from('./config/swagger.yml')
+def pingpong():
+    return jsonify('pong')
+
+@application.route('/api/math-translation', methods=["POST"])
 @swag_from('./config/swagger.yml')
 def mathtranslation():
     if not request.is_json:
