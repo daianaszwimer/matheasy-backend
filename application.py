@@ -7,7 +7,7 @@ swagger = Swagger(application)
 
 @application.route('/', methods=["GET"])
 @swag_from('./config/swagger.yml')
-def pingpong():
+def helloworld():
     return jsonify('Hello World!')
 
 @application.route('/api/ping', methods=["GET"])
