@@ -5,6 +5,11 @@ from flasgger import swag_from, Swagger
 application = Flask(__name__)
 swagger = Swagger(application)
 
+@application.route('/', methods=["GET"])
+@swag_from('./config/swagger.yml')
+def pingpong():
+    return jsonify('Hello World!')
+
 @application.route('/api/ping', methods=["GET"])
 @swag_from('./config/swagger.yml')
 def pingpong():
