@@ -9,7 +9,6 @@ This API requires [Python](https://www.python.org/downloads/) to run.
 Install the dependencies using the requirements file
 
 ```sh
-cd src
 pip install -r requirements.txt
 ```
 
@@ -18,7 +17,6 @@ pip install -r requirements.txt
 To run the app follow the next steps:
 
 ```sh
-cd src
 flask run
 ```
 

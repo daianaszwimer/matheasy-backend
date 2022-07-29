@@ -6,18 +6,15 @@ swagger = Swagger(application)
 
 import src.interpreters.addSubstractInterpreter as addSubstractInterpreter
 
-
 @application.route('/', methods=["GET"])
 @swag_from('./config/swagger.yml')
 def helloworld():
     return jsonify('Hello World!')
 
-
 @application.route('/api/ping', methods=["GET"])
 @swag_from('./config/swagger.yml')
 def pingpong():
     return jsonify('pong')
-
 
 @application.route('/api/math-translation', methods=["POST"])
 @swag_from('./config/swagger.yml')
