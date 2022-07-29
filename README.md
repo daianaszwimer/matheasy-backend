@@ -20,6 +20,11 @@ To run the app follow the next steps:
 set FLASK_ENV=development
 set FLASK_APP=application.py
 flask run
+
+# macOs
+export FLASK_ENV=development
+export FLASK_APP=application.py
+flask run
 ```
 
 Open a browser using the following url:
