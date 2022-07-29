@@ -17,6 +17,8 @@ pip install -r requirements.txt
 To run the app follow the next steps:
 
 ```sh
+set FLASK_ENV=development
+set FLASK_APP=application.py
 flask run
 ```
 
