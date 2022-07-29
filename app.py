@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 application = Flask(__name__)
 swagger = Swagger(application)
 
-import interpreters.addSubstractInterpreter as addSubstractInterpreter
+import src.interpreters.addSubstractInterpreter as addSubstractInterpreter
 
 
 @application.route('/', methods=["GET"])
