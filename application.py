@@ -26,6 +26,8 @@ def mathtranslation():
 
     text = input_json['text']
 
-    equation = addSubstractInterpreter.translate(text)
-
-    return jsonify({"result": equation})
+    try:
+        equation = addSubstractInterpreter.translate(text)
+        return jsonify({"result": equation})
+    except:
+        return jsonify({"error": "An exception occurred"}), 404
