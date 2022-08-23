@@ -1,20 +1,28 @@
 from flasgger import swag_from, Swagger
 from flask import Flask, request, jsonify
+from src.modelTrainer import model, X_train, y_train
 
 application = Flask(__name__)
 swagger = Swagger(application)
 
-import src.interpreters.addSubstractInterpreter as addSubstractInterpreter
+import src.service as service
+
+@application.before_first_request
+def before_first_request():
+    model.fit(X_train, y_train)
+
 
 @application.route('/', methods=["GET"])
 @swag_from('./config/swagger.yml')
 def helloworld():
     return jsonify('Hello World!')
 
+
 @application.route('/api/ping', methods=["GET"])
 @swag_from('./config/swagger.yml')
 def pingpong():
     return jsonify('pong')
+
 
 @application.route('/api/math-translation', methods=["POST"])
 @swag_from('./config/swagger.yml')
@@ -27,7 +35,7 @@ def mathtranslation():
     text = input_json['text']
 
     try:
-        equation = addSubstractInterpreter.translate(text)
-        return jsonify({"result": equation})
+        result = service.result(text)
+        return jsonify({"result": result})
     except:
         return jsonify({"error": "An exception occurred"}), 404
