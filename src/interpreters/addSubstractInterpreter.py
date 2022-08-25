@@ -19,10 +19,8 @@ def translate_statement(statement):
     def translate(token):
       # TODO: Agregar logica lemmatizar
       if is_operator(token):
-        print('Encontre un operador: ' + token.text)
         return (operators[token.text], token)
       else:
-        print('Encontre un numero: ' + token.text)
         return (token.text, token)
 
     translatedProblem = list(map(translate, mathProblem))
