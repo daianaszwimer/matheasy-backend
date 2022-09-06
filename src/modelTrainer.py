@@ -1,11 +1,11 @@
+import nltk
+import pandas as pd
+from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import TfidfTransformer
-import pandas as pd
-import nltk
-from nltk.corpus import stopwords
 
 nltk.download('stopwords')
 from bs4 import BeautifulSoup

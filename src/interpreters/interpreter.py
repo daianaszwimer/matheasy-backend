@@ -1,6 +1,6 @@
 import src.interpreters.addSubstractInterpreter as addSubstractInterpreter
-import src.interpreters.simpleEquationInterpreter as simpleEquationInterpreter
 import src.interpreters.complexEquationInterpreter as complexEquationInterpreter
+import src.interpreters.simpleEquationInterpreter as simpleEquationInterpreter
 
 
 def interpret(prediction, statement):

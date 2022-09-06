@@ -1,4 +1,5 @@
 import spacy
+from recognizers_number import recognize_number, Culture
 
 # Subdivision del problema
 # 1. Armado del arbol
@@ -11,67 +12,55 @@ import spacy
 # Operadores de 3er orden: * / ¿^?
 
 npl = spacy.load('es_core_news_lg')
-# TODO: Ver como tomar el mayor o igual o menor o igual siendo varias palabras?
+# TODO: Ver como tomar el mayor o igual o menor o igual siendo varias palabras? -> Cargarlo al diccionario de spacy?
 first_order_operators_dictionary = {"igual": "=", "mayor o igual": ">=", "menor o igual": "<=", "mayor": ">",
                                     "menor": "<"}
-first_order_operators = ["=", ">=", "<=", ">", "<"]
 second_order_operators_dictionary = {"mas": "+", "menos": "-", "suma": "+", "resta": "-"}
-second_order_operators = ["+", "-"]
-third_order_operators = ["*", "/"]
+third_order_operators_dictionary = {"por": "*", "dividido": "/", "multiplicacion": "*", "division": "/"}
+operators_dictionary = {}
+operators_dictionary.update(first_order_operators_dictionary)
+operators_dictionary.update(second_order_operators_dictionary)
+operators_dictionary.update(third_order_operators_dictionary)
 
 
-def translate_statement(statement):
-    print("1. Traducir el enunciado: " + statement)
-    equation_tree = []
-    # Buscar first order operator en oracion (podria haber mas de uno? entiendo que no pq es la raiz)
-    first_order_operator = None
-    doc = npl(statement)
-    for token in doc:
-        if token.text in first_order_operators:
-            first_order_operator = token.text
-        if token.text in first_order_operators_dictionary.keys():
-            first_order_operator = first_order_operators_dictionary[token.text]
-            statement = statement.replace(token.text, first_order_operator)
-
-    print("2. El operador de primer orden es: " + first_order_operator)
-    operator_divisions = statement.split(first_order_operator)
-    first_node = Node(first_order_operator, operator_divisions[0],
-                      operator_divisions[1])  # Podria no existir el index 0 o 1?
-    equation_tree.append(first_node)
-    print("Operador: " + first_node.operator)
-    print("Nodo izquierdo: " + first_node.left_node)
-    print("Nodo derecho: " + first_node.right_node)
-
-    # TODO: Lo que sigue deberia evaluarse multiples veces (buscando todos los de orden 2)
-    # Evaluación del nodo izquierdo
-    print("3. Evaluo el nodo izquierdo: " + first_node.left_node)
-    second_order_operator = None
-    doc2 = npl(first_node.left_node) # Aca me esta faltando "desechar" el string que ya se evaluo en el nodo anterior
-    for token in doc2:
-        if token.text in second_order_operators:
-            second_order_operator = token.text
-        if token.text in second_order_operators_dictionary.keys():
-            second_order_operator = second_order_operators_dictionary[token.text]
-            statement = statement.replace(token.text, second_order_operator)
-
-    print("El primer operador de segundo orden es: " + second_order_operator)
-    operator_divisions = statement.split(second_order_operator)
-    second_node = Node(second_order_operator, operator_divisions[0], operator_divisions[1])
-    equation_tree.append(second_node)
-    print("Operador: " + second_node.operator)
-    print("Nodo izquierdo: " + second_node.left_node)
-    print("Nodo derecho: " + second_node.right_node)
-
-    return equation_tree
-    # Itero cada nodo del de arriba y busco operadores de 2do orden, podria haber muchos
-    # Cuando termino con los de 2do orden, busco de 3er orden
+def search_math_term(sentence):
+    statement = npl(sentence)
+    for operator in operators_dictionary.keys():
+        if operator in statement.text:
+            print("Encontre un operador en statement: " + operator)
+            return "operator", operator
+    # Si no salio por encontrar ningun operador, busco numero o incognita
+    print("Voy a analizar si encuentro algun numero en: " + statement.text)
+    for token in statement:
+        print("Voy a analizar si esto es un numero: " + token.text)
+        if token.pos_ == "NUM" or token.text.isnumeric():
+            print("Encontre un numero: " + token.text)
+            if token.text.isnumeric():
+                return "leaf", token.text
+            else:  # Es un numero en palabras
+                number = recognize_number(token.text, Culture.Spanish)[0].resolution["value"]
+                return "leaf", number
+    else:
+        return "leaf", "x"  # TODO
 
 
 class Node:
-    def __init__(self, operator, left_node, right_node):
-        self.operator = operator
-        self.left_node = left_node
-        self.right_node = right_node
+
+    def __init__(self, sentence):
+        word_type, word = search_math_term(sentence)
+        if word_type == "operator":
+            operator = operators_dictionary[word]  # Busco el operador que se corresponde con la palabra
+            print("Tengo un operador que es: " + word + " y su simbolo es " + operator)
+            parts_of_sentence = sentence.split(word)
+            print("Las dos partes que me quedan despues de este operador, son: " + parts_of_sentence[0] + " // " +
+                  parts_of_sentence[1])
+            self.operator = operator
+            self.left_node = Node(parts_of_sentence[0])
+            self.right_node = Node(parts_of_sentence[1])
+        else:
+            self.operator = word
+            self.left_node = None
+            self.right_node = None
 
     def resolve(self):
         # Existe un caso donde haya un hijo izquierdo en None y el otro no?
@@ -80,7 +69,15 @@ class Node:
         else:
             return self.left_node.resolve() + " " + self.operator + " " + self.right_node.resolve()
 
-# def translate_statement(statement):
-#    p1 = Node("=", Node("+", Node("9", None, None), Node("8", None, None)), Node("3", None, None))
-#    print(p1.resolve())
-#    return p1.resolve()
+
+def translate_statement(statement):
+    '''p1 = Node("¿Cual es el numero que sumado a 1 es igual a 2?")
+    print(p1.resolve())
+    return p1.resolve()'''
+    p1 = Node(statement)
+    print(p1.resolve())
+    return p1.resolve()
+
+# ¿Que falta?:
+# spacy: contemplar mayor e igual, y eso
+# detectar parentesis en el caso de un "y"
