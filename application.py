@@ -1,11 +1,13 @@
 from flasgger import swag_from, Swagger
 from flask import Flask, request, jsonify
+
 from src.modelTrainer import model, X_train, y_train
 
 application = Flask(__name__)
 swagger = Swagger(application)
 
 import src.service as service
+
 
 @application.before_first_request
 def before_first_request():
@@ -36,6 +38,7 @@ def mathtranslation():
 
     try:
         result = service.result(text)
-        return jsonify({"result": result})
+        json = {"result": {"tag": result.tag, "expression": result.expression}}
+        return jsonify(json)
     except:
         return jsonify({"error": "An exception occurred"}), 404
