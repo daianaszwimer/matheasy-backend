@@ -1,9 +1,10 @@
 import spacy
 from recognizers_number import recognize_number, Culture
+from src.interpreters.domain import Response
 
 npl = spacy.load('es_core_news_lg') # TODO: Ver de hacerlo mas global
 
-def translate_statement(statement):
+def translate_statement(statement, tag):
 
     def is_operator(token):
         return token.text in list(operators.keys())
@@ -37,7 +38,7 @@ def translate_statement(statement):
         finalTranslatedProblem.append(operator)
     finalTranslatedProblem.pop()
     equation = ' '.join(finalTranslatedProblem)
-    return equation
+    return Response(equation, tag)
 
   # TODO: Definir lemmatization para las keys. Ojo con que:
   # Lemma de suma es suma, sumar es sumar, sumatoria es sumatoria (deberia poner todas)

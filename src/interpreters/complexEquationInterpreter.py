@@ -1,6 +1,8 @@
 import spacy
 from recognizers_number import recognize_number, Culture
 
+from src.interpreters.domain import Response
+
 npl = spacy.load('es_core_news_lg')
 # TODO: Ver como tomar el mayor o igual o menor o igual siendo varias palabras? -> Cargarlo al diccionario de spacy?
 first_order_operators_dictionary = {"igual": "=", "mayor o igual": ">=", "menor o igual": "<=", "mayor": ">",
@@ -96,8 +98,11 @@ class Node:
             return "(" + self.left_node.resolve() + " " + self.operator + " " + self.right_node.resolve() + ")"
 
 
-def translate_statement(statement):
+def translate_statement(statement, tag):
     p1 = Node(statement)
     result = p1.resolve()
-    print(result)
-    return result[1:-1]
+    final_result = result[1:-1]
+    if "funcion" in statement or tag == "Function":  # TODO: Mejorar
+        return final_result
+    else:
+        return Response(final_result, tag)
