@@ -103,6 +103,6 @@ def translate_statement(statement, tag):
     result = p1.resolve()
     final_result = result[1:-1]
     if "funcion" in statement or tag == "Function":  # TODO: Mejorar
-        return final_result
+        return Response(final_result, tag)
     else:
         return Response(final_result, tag)

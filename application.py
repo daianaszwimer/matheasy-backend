@@ -1,12 +1,11 @@
 from flasgger import swag_from, Swagger
 from flask import Flask, request, jsonify
 
+import src.service as service
 from src.modelTrainer import model, X_train, y_train
 
 application = Flask(__name__)
 swagger = Swagger(application)
-
-import src.service as service
 
 
 @application.before_first_request

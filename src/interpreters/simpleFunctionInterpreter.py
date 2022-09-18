@@ -7,17 +7,17 @@ end_characters = [")", "}", "]", "x", "y", "0", "1", "2", "3", "4", "5", "6", "7
 pattern = re.compile(r"\s+")
 
 
-# Si no arranca con f(x) se le agrega -> Mejorar
-
 def translate_statement(statement, tag):
     statement = statement.lower()
     init_index = search_character(init_characters, statement) - 1  # TODO: Revisar
     end_index = len(statement) - search_character(end_characters, statement[::-1])
     equation = statement[init_index:end_index]
-    if (not "f(x)" in equation and not "y =" in equation) or not "=" in equation:
-        equation = "f(x) = " + str(equation)
     # Normalizo los espacios en blanco de la ecuacion
     normalized_equation = pattern.sub("", equation)
+    if "f(x)=" in equation:
+        normalized_equation = str(normalized_equation).replace('f(x)=', '')
+    if "=f(x)" in equation:
+        normalized_equation = str(normalized_equation).replace('=f(x)', '')
     return Response(normalized_equation, tag)
 
 
