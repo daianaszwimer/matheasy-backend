@@ -54,8 +54,6 @@ def search_math_term(sentence):
                 return "operator", near_operator
     for operator in operators_dictionary.keys():
         if operator in statement.text:
-            print("ENCONTRE UN OPERADOR")
-            print(operator)
             return "operator", operator
     # Si no salio por encontrar ningun operador, busco numero o incognita
     for token in statement:
