@@ -14,10 +14,13 @@ def translate_statement(statement, tag):
     equation = statement[init_index:end_index]
     # Normalizo los espacios en blanco de la ecuacion
     normalized_equation = pattern.sub("", equation)
-    if "f(x)=" in equation:
+    print(normalized_equation)
+    if "f(x)=" or "y=" in normalized_equation:
         normalized_equation = str(normalized_equation).replace('f(x)=', '')
-    if "=f(x)" in equation:
+        normalized_equation = str(normalized_equation).replace('y=', '')
+    if "=f(x)" or "=y" in normalized_equation:
         normalized_equation = str(normalized_equation).replace('=f(x)', '')
+        normalized_equation = str(normalized_equation).replace('=y', '')
     return Response(normalized_equation, tag)
 
 

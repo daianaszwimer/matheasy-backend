@@ -13,7 +13,7 @@ def translate_statement(statement, tag):
     return Response(equation, tag)
 
 
-def search_character(characters, statement):
+def search_character(characters, statement):  # TODO: Revisar: Despeja x de x + 2 = 4
     index = len(statement) + 1
     for character in characters:
         searched_index = statement.find(character)

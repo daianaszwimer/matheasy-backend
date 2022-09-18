@@ -12,6 +12,7 @@ def translate_statement(statement, tag):
         for character in dividing_characters:
             if character in statement:
                 result = translate_vertex_point_fun(statement, character)
+                return Response(result, tag)
     # Si me dice la funcion que pasa por tales puntos
     # TODO: Si no viene la palabra punto/s? Ej: analiza la funcion que pasa por el origen y por P=(1;2)
     else:
