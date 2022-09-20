@@ -99,11 +99,9 @@ class Node:
 
 
 def translate_statement(statement, tag):
-    print("ENTRE A TRADUCIR UNA ECUACION COMPLEJA")
     p1 = Node(statement)
     result = p1.resolve()
     final_result = result[1:-1]
-    if "funcion" in statement or tag == "Function":  # TODO: Mejorar
-        return Response(final_result, tag)
-    else:
-        return Response(final_result, tag)
+    if not any(word in first_order_operators_dictionary.values() for word in final_result):
+        final_result = final_result + " = x"
+    return Response(final_result, tag)

@@ -20,6 +20,8 @@ def translate_statement(statement, tag):
     return Response(result, tag)
 
 
+# TODO: Ver negativos y comas
+# agregar caso del origen en palabras
 # Funcion para resolver cuadratica con dato vértice y punto
 def translate_vertex_point_fun(statement, word):
     divided_statement = statement.split(word)
@@ -42,7 +44,17 @@ def translate_vertex_point_fun(statement, word):
     yv = format_number(float(vertex[1]))
     # Calculo a
     a = format_number((y - yv) / ((x - xv) * (x - xv)))
-    equation = str(a) + "*(x - " + str(xv) + ")^2 + " + str(yv)  # TODO: Mejorar este armado de ecuacion
+    # Calculo a, b y c
+    print("A")
+    print(a)
+    print("CALCULO COEFICIENTES")
+    a1 = format_number(a)  # Coeficiente que multiplica a x^2
+    print(a1)
+    b = format_number(a * xv * -2)  # Coeficiente que multiplica a x
+    print(b)
+    c = format_number(xv * xv * a + yv)  # Coeficiente independiente
+    print(c)
+    equation = str(a1) + "*x^2 + " + str(b) + "*x + " + str(c)
     return equation
 
 
@@ -84,7 +96,7 @@ def translate_simple_points_fun(statement):  # TODO ver como escalar esto a cosa
             third = format_number(round(resolve[2], 2))
             equation = str(first) + "*x^2" + " + " + str(second) + "*x + " + str(third)
         else:
-            first = format_number(round(resolve[0], 2))
+            first = format_number(round(resolve[0], 2))  # TODO: Revisar round
             second = format_number(round(resolve[1], 2))
             third = format_number(round(resolve[2], 2))
             fourth = format_number(round(resolve[3], 2))

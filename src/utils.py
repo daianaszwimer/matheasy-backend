@@ -12,10 +12,11 @@ def search_points(statement):
 
 
 def format_number(number):
+    number = float(number)
     if number.is_integer():
         return int(number)
     else:
-        return number
+        return round(float(number), 6)
 
 
 def search_number(statement):
