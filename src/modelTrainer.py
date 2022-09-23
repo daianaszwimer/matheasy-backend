@@ -13,7 +13,7 @@ import re
 
 # Traemos los datos
 df = pd.read_csv(
-    'https://gist.githubusercontent.com/rgonzalezt/17ba22ffd9f7ac6c23270fd61811b8d6/raw/99b46a5ec5b7736edfbb8abc31cab5274033bff8/ejercicios_variados.csv')
+    'https://gist.githubusercontent.com/rgonzalezt/83e9632f7e06d424aca703a8599205bf/raw/3a5d26bbd03acdbd3d59698e121af5180fd7d164/ejercicios_modelo.csv')
 df = df[pd.notnull(df['tag'])]
 
 # Limpieza de datos
