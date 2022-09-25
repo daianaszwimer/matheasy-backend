@@ -12,8 +12,8 @@ from bs4 import BeautifulSoup
 import re
 
 # Traemos los datos
-df = pd.read_csv(
-    'https://gist.githubusercontent.com/rgonzalezt/83e9632f7e06d424aca703a8599205bf/raw/3a5d26bbd03acdbd3d59698e121af5180fd7d164/ejercicios_modelo.csv')
+df = pd.read_csv('https://gist.githubusercontent.com/rgonzalezt/83e9632f7e06d424aca703a8599205bf/raw/69dc9f983c5c571fe3371ffae41956c9afe7a250/ejercicios_modelo_v2_24_9.csv')
+
 df = df[pd.notnull(df['tag'])]
 
 # Limpieza de datos

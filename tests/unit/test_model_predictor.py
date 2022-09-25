@@ -16,6 +16,16 @@ def test_despeja_la_x_de_inecuacion_es_ecuacion_explicita(modelo):
     prediccion = modelPredictor.predict("despejar x de la siguiente ecuacion: x + 8 < 9")
     assert prediccion == "ecuacion-explicita"
 
+#FIXME
+def test_resolve_la_x_de_ecuacion_es_ecuacion_explicita(modelo):
+    prediccion = modelPredictor.predict("Resolve la x de x+(2+16) +4 = 5")
+    assert prediccion == "ecuacion-explicita"
+
+#FIXME
+def test_resolve_la_x_de_ecuacion_compleja_es_ecuacion_explicita(modelo):
+    prediccion = modelPredictor.predict("Resolve la x de x*(2+16) +4 = 5")
+    assert prediccion == "ecuacion-explicita"
+
 def test_resolve_inecuacion_mayor_es_ecuacion_implicita(modelo):
     prediccion = modelPredictor.predict("Resolvé la ecuación x más 63 dividido 63 es mayor a 55.")
     assert prediccion == "ecuacion-implicita"
@@ -32,6 +42,7 @@ def test_analiza_la_funcion_es_funcion_explicita(modelo):
     prediccion = modelPredictor.predict("Analiza la funcion y = 2*x + 8")
     assert prediccion == "funcion-explicita"
 
+#FIXME
 def test_analiza_la_funcion_que_pasa_por_puntos_es_funcion_implicita_puntos(modelo):
     prediccion = modelPredictor.predict("Analiza la funcion que pasa por los puntos (1;2) y (2;1)")
     assert prediccion == "funcion-implicita-puntos"
@@ -44,8 +55,17 @@ def test_analiza_la_parabola_que_pasa_por_vertice_es_funcion_implicita_vertice(m
     prediccion = modelPredictor.predict("Analiza la parabola que tiene su vertice en (1,2) y pasa por el punto (2,4)")
     assert prediccion == "funcion-implicita-vertice"
 
+#FIXME
 def test_funcion_que_tiene_pendiente_y_ordenada_es_funcion_implicita_po(modelo):
     prediccion = modelPredictor.predict("Analiza función que tiene ordenada -5 y pendiente 6")
     assert prediccion == "funcion-implicita-po"
 
+#FIXME
+def test_oracion_coloquial_es_funcion_implicita(modelo):
+    prediccion = modelPredictor.predict("Cuál es la función de x sumado a 10 y multiplicado por 5 es igual a 7?")
+    assert prediccion == "funcion-implicita-po"    
+
+def test_funcion_que_pasa_por_vertice_es_funcion_implicita_vertice(modelo):
+    prediccion = modelPredictor.predict("Qué función tiene su vértice en el punto (2,2) y pasa por (10,6)?")
+    assert prediccion == "funcion-implicita-vertice"  
 
