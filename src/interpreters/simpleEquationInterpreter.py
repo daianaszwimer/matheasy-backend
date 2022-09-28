@@ -13,16 +13,18 @@ def translate_statement(statement, tag):
     return Response(equation, tag)
 
 
-def search_character(characters, statement):  # TODO: Revisar: Despeja x de x + 2 = 4
+def search_character(characters, statement):
     index = len(statement) + 1
     for character in characters:
-        searched_index = statement.find(character)
-        if searched_index < index and searched_index != -1 and following_characters_accepted(statement, searched_index):
-            index = searched_index
+        searched_indexes = [i for i, x in enumerate(statement) if x == character]
+        for searched_index in searched_indexes:
+            if searched_index < index and searched_index != -1 and following_characters_accepted(statement,
+                                                                                                 searched_index):
+                index = searched_index
     return index
 
 
 # Si viene algo como "Despeja x de tal ecuacion (...)" veo que el proximo caracter sea un caracter aceptado
 def following_characters_accepted(statement, index):
-    accepted_characters = [*init_characters, *end_characters, "+", "-", "*", "/", "=", " ", ">", "<"]
+    accepted_characters = [*init_characters, *end_characters, "+", "-", "*", "/", "=", " ", ">", "<", "(", ")", "^"]
     return statement[index + 1] in accepted_characters and statement[index + 2] in accepted_characters
