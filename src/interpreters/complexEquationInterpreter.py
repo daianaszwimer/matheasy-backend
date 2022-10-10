@@ -1,3 +1,5 @@
+import re
+
 import spacy
 from recognizers_number import recognize_number, Culture
 
@@ -11,11 +13,11 @@ dividing_by_proximity_words = [
     "todo esto ultimo"]  # TODO: El caso "y todo esto ultimo" me va a complicar, revisar como tomarlo
 second_order_operators_dictionary = {"mas": "+", "menos": "-", "suma": "+", "sumado": "+", "resta": "-", "restado": "-"}
 third_order_operators_dictionary = {"multiplicado por": "*", "por": "*", "dividido": "/", "multiplicacion": "*",
-                                    "division": "/", "multiplicado": "*"}
+                                    "division": "/", "multiplicado": "*", "sobre": "/"}
 operators_left_dictionary = {"triple": "3 *", "doble": "2 *", "cuadruple": "4 *", "quintuple": "5 *",
                              "sextuple": "6 *"}  # TODO: Ver caso cuarto, mitad
 operators_right_dictionary = {"triplicado": "* 3", "duplicado": "* 2", "cuadruplicado": "* 4", "quintuplicado": "* 5",
-                              "sextuplicado": "* 6"}  # TODO: Completar
+                              "sextuplicado": "* 6", "cuadrado": "^2", "cubo": "^3"}  # TODO: Completar
 operators_dictionary = {}
 operators_dictionary.update(first_order_operators_dictionary)
 operators_dictionary.update(second_order_operators_dictionary)
@@ -25,15 +27,15 @@ operators_dictionary.update(operators_right_dictionary)
 
 
 def find_near_operator(dividing_word, sentence):
-    spliting_phrase = dividing_word
-    statement = npl(sentence)
-    for token in statement:
-        if not token.text.isspace():
-            spliting_phrase = spliting_phrase + " " + token.text
-            if token.pos_ == "NUM" or token.text.isnumeric():
+    for operator in operators_dictionary.keys():
+        operator_occurence_index = sentence.find(operator)
+        if operator_occurence_index != -1:
+            r = r"-?\d+\.?\d*"
+            # TODO si hay un numero en palabras no se va a encontrar aca
+            if re.search(r, sentence).start() < operator_occurence_index:
                 return None
-            if token.text in operators_dictionary.keys():
-                return spliting_phrase
+            else:
+                return dividing_word + sentence[:operator_occurence_index + len(operator)]
 
 
 def search_math_term(sentence):
