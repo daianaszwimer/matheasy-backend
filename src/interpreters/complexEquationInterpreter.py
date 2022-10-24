@@ -1,41 +1,48 @@
+import re
+
 import spacy
 from recognizers_number import recognize_number, Culture
 
 from src.interpreters.domain import Response
 
 npl = spacy.load('es_core_news_lg')
-# TODO: Ver como tomar el mayor o igual o menor o igual siendo varias palabras? -> Cargarlo al diccionario de spacy?
-first_order_operators_dictionary = {"igual": "=", "mayor o igual": ">=", "menor o igual": "<=", "mayor": ">",
+first_order_operators_dictionary = {"mayor o igual": ">=", "menor o igual": "<=", "igual": "=", "mayor": ">",
                                     "menor": "<"}
 dividing_words = ["y"]
 dividing_by_proximity_words = [
     "todo esto ultimo"]  # TODO: El caso "y todo esto ultimo" me va a complicar, revisar como tomarlo
 second_order_operators_dictionary = {"mas": "+", "menos": "-", "suma": "+", "sumado": "+", "resta": "-", "restado": "-"}
-third_order_operators_dictionary = {"por": "*", "dividido": "/", "multiplicacion": "*", "division": "/",
-                                    "multiplicado": "*"}  # TODO: multiplicado por
+third_order_operators_dictionary = {"multiplicado por": "*", "por": "*", "dividido": "/", "multiplicacion": "*",
+                                    "division": "/", "multiplicado": "*", "sobre": "/"}
+operators_left_dictionary = {"triple": "3 *", "doble": "2 *", "cuadruple": "4 *", "quintuple": "5 *",
+                             "sextuple": "6 *"}  # TODO: Ver caso cuarto, mitad
+operators_right_dictionary = {"triplicado": "* 3", "duplicado": "* 2", "cuadruplicado": "* 4", "quintuplicado": "* 5",
+                              "sextuplicado": "* 6", "cuadrado": "^2", "cubo": "^3"}  # TODO: Completar
 operators_dictionary = {}
 operators_dictionary.update(first_order_operators_dictionary)
 operators_dictionary.update(second_order_operators_dictionary)
 operators_dictionary.update(third_order_operators_dictionary)
+operators_dictionary.update(operators_left_dictionary)
+operators_dictionary.update(operators_right_dictionary)
 
 
 def find_near_operator(dividing_word, sentence):
-    spliting_phrase = dividing_word
-    statement = npl(sentence)
-    for token in statement:
-        if not token.text.isspace():
-            spliting_phrase = spliting_phrase + " " + token.text
-            if token.pos_ == "NUM" or token.text.isnumeric():
+    for operator in operators_dictionary.keys():
+        operator_occurence_index = sentence.find(operator)
+        if operator_occurence_index != -1:
+            r = r"-?\d+\.?\d*"
+            # TODO si hay un numero en palabras no se va a encontrar aca
+            if re.search(r, sentence).start() < operator_occurence_index:
                 return None
-            if token.text in operators_dictionary.keys():
-                return spliting_phrase
+            else:
+                return dividing_word + sentence[:operator_occurence_index + len(operator)]
 
 
 def search_math_term(sentence):
     statement = npl(sentence)
     for operator in first_order_operators_dictionary.keys():
         if operator in statement.text:
-            return "operator", operator
+            return "operator", operator, "first_order"
     for word in dividing_words:
         if word in statement.text:
             start_index_word = statement.text.rfind(word)
@@ -43,7 +50,7 @@ def search_math_term(sentence):
             right_sentence = statement.text[end_index_word:-1]
             near_operator = find_near_operator(word, right_sentence)
             if near_operator is not None:
-                return "operator", near_operator
+                return "operator", near_operator, "divisory"
     for word in dividing_by_proximity_words:
         if word in statement.text:
             start_index_word = statement.text.rfind(word)
@@ -51,28 +58,38 @@ def search_math_term(sentence):
             right_sentence = statement.text[end_index_word:-1]
             near_operator = find_near_operator(word, right_sentence)
             if near_operator is not None:
-                return "operator", near_operator
+                return "operator", near_operator, "divisory_proximity"
     for operator in operators_dictionary.keys():
         if operator in statement.text:
-            return "operator", operator
+            word_type = "operator"
+            if operator in operators_left_dictionary.keys():
+                word_type = "operator_left"
+            elif operator in operators_right_dictionary.keys():
+                word_type = "operator_right"
+            return word_type, operator, "secondary_order"
     # Si no salio por encontrar ningun operador, busco numero o incognita
     for token in statement:
         if token.pos_ == "NUM" or token.text.isnumeric():
             if token.text.isnumeric():
-                return "leaf", token.text
+                return "leaf", token.text, "last_order"
             else:  # Es un numero en palabras
                 number = recognize_number(token.text, Culture.Spanish)[0].resolution["value"]
-                return "leaf", number
+                return "leaf", number, "last_order"
     else:
-        return "leaf", "x"  # TODO
+        return "leaf", "x", "last_order"  # TODO
 
 
 class Node:
 
     def __init__(self, sentence):
-        word_type, word = search_math_term(sentence)
+        word_type, word, order = search_math_term(sentence)
         if word_type == "operator":
-            operator = operators_dictionary[word.split()[-1]]  # Busco el operador que se corresponde con la palabra
+            # Si es de 1er orden, puede estar el caso de "mayor o igual" que quiero quedarme con toda la expresion
+            if order == "first_order":
+                value = word
+            else:  # Si hay un "y multiplicado" yo solo quiero tomar el ultimo (multiplicado)
+                value = word.split()[-1]
+            operator = operators_dictionary[value]  # Busco el operador que se corresponde con la palabra
             parts_of_sentence = sentence.split(word)
             parts_number = len(parts_of_sentence)
             if parts_number > 2:  # Al splitear encontro mas de una ocurrencia
@@ -85,15 +102,29 @@ class Node:
                 self.operator = operator
                 self.left_node = Node(parts_of_sentence[0])
                 self.right_node = Node(parts_of_sentence[1])
+        # Casos operadores especiales
+        elif word_type == "operator_left":  # Si tengo un caso como "el triple de 2"
+            parts_of_sentence = sentence.split(word)
+            self.operator = operators_left_dictionary[word]
+            self.left_node = None
+            self.right_node = Node(parts_of_sentence[1])
+        elif word_type == "operator_right":  # Si tengo un caso como "2 triplicado"
+            parts_of_sentence = sentence.split(word)
+            self.operator = operators_right_dictionary[word]
+            self.left_node = Node(parts_of_sentence[0])
+            self.right_node = None
         else:
             self.operator = word
             self.left_node = None
             self.right_node = None
 
     def resolve(self):
-        # Existe un caso donde haya un hijo izquierdo en None y el otro no?
         if self.left_node is None and self.right_node is None:
             return self.operator
+        elif self.left_node is None and self.right_node is not None:  # Si tengo un caso como "el doble de 2"
+            return "(" + self.operator + " " + self.right_node.resolve() + ")"
+        elif self.left_node is not None and self.right_node is None:  # Si tengo un caso como "2 duplicado"
+            return "(" + self.left_node.resolve() + " " + self.operator + ")"
         else:
             return "(" + self.left_node.resolve() + " " + self.operator + " " + self.right_node.resolve() + ")"
 
@@ -102,7 +133,6 @@ def translate_statement(statement, tag):
     p1 = Node(statement)
     result = p1.resolve()
     final_result = result[1:-1]
-    if "funcion" in statement or tag == "Function":  # TODO: Mejorar
-        return final_result
-    else:
-        return Response(final_result, tag)
+    if not any(word in first_order_operators_dictionary.values() for word in final_result):
+        final_result = final_result + " = x"
+    return Response(final_result, tag)

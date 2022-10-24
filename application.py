@@ -33,7 +33,7 @@ def mathtranslation():
 
     try:
         result = service.result(text)
-        logger.info("La traduccion del enunciado: " + text + " es: " + result)
+        logger.info("La expresion matematica del enunciado: " + text + " es: " + result.expression + " y su tag es: " + result.tag)
         json = {"result": {"tag": result.tag, "expression": result.expression}}
         return jsonify(json)
     except:
