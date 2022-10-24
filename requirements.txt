@@ -79,4 +79,3 @@ wasabi==0.10.1
 webencodings==0.5.1
 Werkzeug==2.1.2
 zipp==3.8.1
-watchtower==3.0.0
