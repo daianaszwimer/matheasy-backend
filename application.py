@@ -1,13 +1,9 @@
 from flasgger import swag_from, Swagger
 from flask import Flask, request, jsonify
-import logging
 from src.modelTrainer import model, X_train, y_train
 
 application = Flask(__name__)
 swagger = Swagger(application)
-
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
 
 import src.service as service
 
@@ -33,9 +29,9 @@ def mathtranslation():
 
     try:
         result = service.result(text)
-        logger.info("La expresion matematica del enunciado: " + text + " es: " + result.expression + " y su tag es: " + result.tag)
+        print("La expresion matematica del enunciado: " + text + " es: " + result.expression + " y su tag es: " + result.tag)
         json = {"result": {"tag": result.tag, "expression": result.expression}}
         return jsonify(json)
     except:
-        logger.info("Error con el enunciado: ", text)
+        print("Error con el enunciado: ", text)
         return jsonify({"error": "An exception occurred"}), 404
