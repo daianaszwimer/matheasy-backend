@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 import re
 
 # Traemos los datos
-df = pd.read_csv('https://gist.githubusercontent.com/rgonzalezt/83e9632f7e06d424aca703a8599205bf/raw/69dc9f983c5c571fe3371ffae41956c9afe7a250/ejercicios_modelo_v2_24_9.csv')
+df = pd.read_csv('https://gist.githubusercontent.com/rgonzalezt/76a7a0e21babd3b7c72719b0df44f334/raw/260817cf8f36e850497e309c285c2cec021cc400/ejercicios_modelo_19_10.csv')
 
 df = df[pd.notnull(df['tag'])]
 

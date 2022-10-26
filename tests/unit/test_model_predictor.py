@@ -38,9 +38,17 @@ def test_cual_es_el_numero_que_cumple_condicion_es_mayor_a_otro_numero_es_ecuaci
     prediccion = modelPredictor.predict("cual es el numero que multiplicado 2 y sumado 7 es mayor a 100?")
     assert prediccion == "ecuacion-implicita"
 
-def test_cual_es_el_numero_que_cumple_condicion_es_mayor_a_otro_numero_letras__es_ecuacion_implicita(modelo):
+def test_cual_es_el_numero_que_cumple_condicion_es_mayor_a_otro_numero_letras_es_ecuacion_implicita(modelo):
     prediccion = modelPredictor.predict("cual es el numero que multiplicado dos y sumado cuatro es mayor a ochenta?")
     assert prediccion == "ecuacion-implicita"
+
+def test_cual_es_el_numero_que_sumado_8_es_menor_a_cien_es_ecuacion_implicita(modelo):
+    prediccion = modelPredictor.predict("Cual es el numero que sumado 8 es menor a cien? ")
+    assert prediccion == "ecuacion-implicita"
+
+def test_que_numero_elevado_al_cuadrado_y_sumado_5_es_igual_a_148_es_ecuacion_implicita(modelo):
+    prediccion = modelPredictor.predict("Que numero elevado al cuadrado y sumado 5 es igual a 148?")
+    assert prediccion == "ecuacion-implicita"  
 
 def test_analiza_la_funcion_es_funcion_explicita(modelo):
     prediccion = modelPredictor.predict("Analiza la funcion y = 2*x + 8")
@@ -65,14 +73,13 @@ def test_analiza_la_parabola_que_pasa_por_vertice_es_funcion_implicita_vertice(m
 
 #FIXME
 def test_funcion_que_tiene_pendiente_y_ordenada_es_funcion_implicita_po(modelo):
-    prediccion = modelPredictor.predict("Analiza función que tiene ordenada -5 y pendiente 6")
+    prediccion = modelPredictor.predict("Analiza la función que tiene ordenada -5 y pendiente 6")
     assert prediccion == "funcion-implicita-po"
 
 def test_indica_dominio_imagen_de_funcion_que_tiene_pendiente_y_ordenada_es_funcion_implicita_po(modelo):
     prediccion = modelPredictor.predict("Indicá el dominio e imagen de la función que tiene ordenada -5 y pendiente 6")
     assert prediccion == "funcion-implicita-po"
 
-#FIXME
 def test_oracion_coloquial_es_funcion_implicita(modelo):
     prediccion = modelPredictor.predict("Cuál es la función de x sumado a 10 y multiplicado por 5 es igual a 7?")
     assert prediccion == "funcion-implicita"    
@@ -84,4 +91,8 @@ def test_determina_oracion_coloquial_es_funcion_implicita(modelo):
 def test_funcion_que_pasa_por_vertice_es_funcion_implicita_vertice(modelo):
     prediccion = modelPredictor.predict("Qué función tiene su vértice en el punto (2,2) y pasa por (10,6)?")
     assert prediccion == "funcion-implicita-vertice"  
+
+def test_cual_es_la_diferencia_entre_8_y_5_es_ecuacion_implicita(modelo):
+    prediccion = modelPredictor.predict("Cual es la diferencia de 8 y 5?")
+    assert prediccion == "ecuacion-implicita"  
 
