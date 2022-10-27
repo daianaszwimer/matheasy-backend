@@ -3,15 +3,21 @@ import re
 import spacy
 from recognizers_number import recognize_number, Culture
 
+import src.interpreters.addSubstractInterpreter as addSubstractInterpreter
 from src.interpreters.domain import Response
 
 npl = spacy.load('es_core_news_lg')
 first_order_operators_dictionary = {"mayor o igual": ">=", "menor o igual": "<=", "igual": "=", "mayor": ">",
                                     "menor": "<"}
+first_order_operators_dictionary = {"mayor o igual": ">=", "menor o igual": "<=", "igual": "=", "mayor": ">",
+                                    "menor": "<"}
 dividing_words = ["y"]
 dividing_by_proximity_words = [
     "todo esto ultimo"]  # TODO: El caso "y todo esto ultimo" me va a complicar, revisar como tomarlo
-second_order_operators_dictionary = {"mas": "+", "menos": "-", "suma": "+", "sumado": "+", "resta": "-", "restado": "-"}
+second_order_operators_dictionary = {"mas": "+", "menos": "-", "restado": "-", "resta": "-", "sumado": "+"}
+operators_left_dictionary_to_delegate_add_substract = {"sumatoria": "+", "diferencia": "-",
+                                                       "suma": "+", "resta": "-"} # TODO: Revisar
+second_second_order_operators_dictionary = {"suma": "+"}  # dividido para no pisar sumatoria
 third_order_operators_dictionary = {"multiplicado por": "*", "por": "*", "dividido": "/", "multiplicacion": "*",
                                     "division": "/", "multiplicado": "*", "sobre": "/"}
 operators_left_dictionary = {"triple": "3 *", "doble": "2 *", "cuadruple": "4 *", "quintuple": "5 *",
@@ -21,6 +27,8 @@ operators_right_dictionary = {"triplicado": "* 3", "duplicado": "* 2", "cuadrupl
 operators_dictionary = {}
 operators_dictionary.update(first_order_operators_dictionary)
 operators_dictionary.update(second_order_operators_dictionary)
+operators_dictionary.update(operators_left_dictionary_to_delegate_add_substract)
+operators_dictionary.update(second_second_order_operators_dictionary)
 operators_dictionary.update(third_order_operators_dictionary)
 operators_dictionary.update(operators_left_dictionary)
 operators_dictionary.update(operators_right_dictionary)
@@ -62,7 +70,9 @@ def search_math_term(sentence):
     for operator in operators_dictionary.keys():
         if operator in statement.text:
             word_type = "operator"
-            if operator in operators_left_dictionary.keys():
+            if operator in operators_left_dictionary_to_delegate_add_substract.keys():
+                word_type = "operator_left_delegate_add_substract"
+            elif operator in operators_left_dictionary.keys():
                 word_type = "operator_left"
             elif operator in operators_right_dictionary.keys():
                 word_type = "operator_right"
@@ -103,6 +113,11 @@ class Node:
                 self.left_node = Node(parts_of_sentence[0])
                 self.right_node = Node(parts_of_sentence[1])
         # Casos operadores especiales
+        elif word_type == "operator_left_delegate_add_substract":  # Sumatoria de 5 y 5"
+            parts_of_sentence = sentence.split(word)
+            self.operator = "(" + addSubstractInterpreter.translate_statement(word + parts_of_sentence[1], "equation").expression + ")"
+            self.left_node = None
+            self.right_node = None
         elif word_type == "operator_left":  # Si tengo un caso como "el triple de 2"
             parts_of_sentence = sentence.split(word)
             self.operator = operators_left_dictionary[word]

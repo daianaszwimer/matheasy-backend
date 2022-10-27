@@ -8,6 +8,7 @@ dividing_characters = ["y", ",", "-", "/"]  # TODO: Se puede replicar con la log
 
 def translate_statement(statement, tag):
     # Si es una parabola con vertice y punto
+    print("statement")
     if "vertice" in statement:  # TODO: Alguna palabra mas? -> Se puede borrar una vez que este el modelo
         for character in dividing_characters:
             if character in statement:
@@ -30,12 +31,12 @@ def translate_vertex_point_fun(statement, word):
     # Analisis de la primera parte
     if "vertice" in first_part:
         vertex = search_points(first_part)[0]
-    if "punto" in first_part:
+    if "punto" in first_part or "vertice" not in first_part:
         point = search_points(first_part)[0]
     # Analisis de la segunda parte
     if "vertice" in second_part:
         vertex = search_points(second_part)[0]
-    if "punto" in second_part:
+    if "punto" in second_part or "vertice" not in second_part:
         point = search_points(second_part)[0]
     # Asigno valores: x, y, xv, yv
     x = format_number(float(point[0]))
@@ -45,15 +46,9 @@ def translate_vertex_point_fun(statement, word):
     # Calculo a
     a = format_number((y - yv) / ((x - xv) * (x - xv)))
     # Calculo a, b y c
-    print("A")
-    print(a)
-    print("CALCULO COEFICIENTES")
     a1 = format_number(a)  # Coeficiente que multiplica a x^2
-    print(a1)
     b = format_number(a * xv * -2)  # Coeficiente que multiplica a x
-    print(b)
     c = format_number(xv * xv * a + yv)  # Coeficiente independiente
-    print(c)
     equation = str(a1) + "*x^2 + " + str(b) + "*x + " + str(c)
     return equation
 
