@@ -9,14 +9,14 @@ def result(statement):
     equation = interpreter.interpret(prediction, statement)
     return equation
 
-def suggestions(equation): 
+def suggestions(equation, tag): 
     root = get_root_of_equation(equation)
     exponent = get_exponent_of_equation(equation).value
     exerciselist = []
 
     # Number of exercises to generate
     for _ in range(3):
-        similarexercise = mathgenerator.generate_exercise(equation, exponent).replace("=", root)
+        similarexercise = mathgenerator.generate_exercise(exponent, tag).replace("=", root)
         exerciselist.append(similarexercise)
     
     return exerciselist

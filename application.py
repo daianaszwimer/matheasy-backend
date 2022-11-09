@@ -54,9 +54,10 @@ def suggestions():
     input_json = request.get_json()  # get the json from the request
 
     equation = input_json['equation']
+    tag = input_json['tag']
 
     try:
-        result = service.suggestions(equation)
+        result = service.suggestions(equation, tag)
         return jsonify(result)
     except:
         return jsonify({"error": "An exception occurred"}), 404
