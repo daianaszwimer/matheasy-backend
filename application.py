@@ -14,7 +14,6 @@ import src.service as service
 def before_first_request():
     model.fit(X_train, y_train)
 
-
 @application.route('/', methods=["GET"])
 @swag_from('./config/swagger.yml')
 def helloworld():
@@ -44,4 +43,20 @@ def mathtranslation():
         return jsonify(json)
     except:
         print("Error con el enunciado: ", text)
+        return jsonify({"error": "An exception occurred"}), 404
+
+@application.route('/api/suggestions', methods=["POST"])
+@swag_from('./config/swagger.yml')
+def suggestions():
+    if not request.is_json:
+        return jsonify({"error": "Missing JSON in request"}), 400
+
+    input_json = request.get_json()  # get the json from the request
+
+    equation = input_json['equation']
+
+    try:
+        result = service.suggestions(equation)
+        return jsonify(result)
+    except:
         return jsonify({"error": "An exception occurred"}), 404
