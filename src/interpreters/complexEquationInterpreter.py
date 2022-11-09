@@ -5,6 +5,7 @@ from recognizers_number import recognize_number, Culture
 
 import src.interpreters.addSubstractInterpreter as addSubstractInterpreter
 from src.interpreters.domain import Response
+from src.utils import string_is_numeric, is_negative_or_float_number
 
 npl = spacy.load('es_core_news_lg')
 first_order_operators_dictionary = {"mayor o igual": ">=", "menor o igual": "<=", "igual": "=", "mayor": ">",
@@ -16,7 +17,7 @@ dividing_by_proximity_words = [
     "todo esto ultimo"]  # TODO: El caso "y todo esto ultimo" me va a complicar, revisar como tomarlo
 second_order_operators_dictionary = {"mas": "+", "menos": "-", "restado": "-", "resta": "-", "sumado": "+"}
 operators_left_dictionary_to_delegate_add_substract = {"sumatoria": "+", "diferencia": "-",
-                                                       "suma": "+", "resta": "-"} # TODO: Revisar
+                                                       "suma": "+", "resta": "-"}  # TODO: Revisar
 second_second_order_operators_dictionary = {"suma": "+"}  # dividido para no pisar sumatoria
 third_order_operators_dictionary = {"multiplicado por": "*", "por": "*", "dividido": "/", "multiplicacion": "*",
                                     "division": "/", "multiplicado": "*", "sobre": "/"}
@@ -82,6 +83,8 @@ def search_math_term(sentence):
         if token.pos_ == "NUM" or token.text.isnumeric():
             if token.text.isnumeric():
                 return "leaf", token.text, "last_order"
+            if string_is_numeric(token.text):
+                return "leaf", token.text, "last_order"
             else:  # Es un numero en palabras
                 number = recognize_number(token.text, Culture.Spanish)[0].resolution["value"]
                 return "leaf", number, "last_order"
@@ -115,7 +118,8 @@ class Node:
         # Casos operadores especiales
         elif word_type == "operator_left_delegate_add_substract":  # Sumatoria de 5 y 5"
             parts_of_sentence = sentence.split(word)
-            self.operator = "(" + addSubstractInterpreter.translate_statement(word + parts_of_sentence[1], "equation").expression + ")"
+            self.operator = "(" + addSubstractInterpreter.translate_statement(word + parts_of_sentence[1],
+                                                                              "equation").expression + ")"
             self.left_node = None
             self.right_node = None
         elif word_type == "operator_left":  # Si tengo un caso como "el triple de 2"
