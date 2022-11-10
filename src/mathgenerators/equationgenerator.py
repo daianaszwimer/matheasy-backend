@@ -4,7 +4,7 @@ from src.enums import Exponent
 def generate_equation(exponent):
     if exponent == Exponent.TWO.value:
         problem, solution = mathgen.quadratic_equation()
-        problem.replace("Zeros of the Quadratic Equation", "")
+        problem = problem.replace("Zeros of the Quadratic Equation", "")
     else:
         problem, solution  = mathgen.basic_algebra()
     return problem
