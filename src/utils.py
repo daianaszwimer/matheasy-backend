@@ -3,7 +3,9 @@ import re
 import spacy
 import unidecode
 from recognizers_number import recognize_number, Culture
+
 from src.enums import Exponent
+
 npl = spacy.load('es_core_news_lg')
 
 # TODO: Mover de aca
@@ -50,6 +52,8 @@ def is_valid_statement(statement):
             has_any_num = True
         if token.text.isnumeric():
             has_any_num = True
+    if has_numbers(statement.text):
+        has_any_num = True
 
     for operator in operators_dictionary.keys():
         if operator in statement.text:
@@ -62,6 +66,13 @@ def is_valid_statement(statement):
             has_any_operator = True
         # TODO: Check numeros con coma y negativos, string is numeric?
     return has_any_num and has_any_operator
+
+
+def has_numbers(statement):
+    search_digits = re.search(r'\d', statement)
+    print("search digits")
+    print(search_digits)
+    return bool(re.search(r'\d', statement))
 
 
 def search_points(statement):
@@ -95,10 +106,12 @@ def search_number(statement):
                 number = recognize_number(token.text, Culture.Spanish)[0].resolution["value"]
                 return number
 
+
 def is_negative_or_float_number(number):
     r = r'-?\d+[,.]?\d*'
     is_float = re.match(number, r)
     return (number[0] == '-' and len(number) > 1 and number[1:].isnumeric()) or is_float
+
 
 def get_root_of_equation(equation):
     if "<=" in equation:
@@ -111,6 +124,7 @@ def get_root_of_equation(equation):
         return ">"
     else:
         return "="
+
 
 def get_exponent_of_equation(equation):
     if "^2" in equation:

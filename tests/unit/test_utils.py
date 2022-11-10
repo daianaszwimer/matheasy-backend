@@ -34,3 +34,8 @@ def test_6():
 def test_7():
     statement = "Hola como va probando probando !! ?? 1 2 3 4 "
     assert is_valid_statement(statement) == False
+
+
+def test_8():
+    statement = "Obtener el análisis de la siguiente funcion : F(x) =-5x +2"
+    assert is_valid_statement(statement) == True
