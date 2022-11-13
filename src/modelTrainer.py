@@ -1,19 +1,21 @@
 import nltk
 import pandas as pd
 from nltk.corpus import stopwords
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
+# modelo versión 2
+from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import Pipeline
 
 nltk.download('stopwords')
-from bs4 import BeautifulSoup
 import re
 from unicodedata import normalize
 
+from bs4 import BeautifulSoup
+
 # Traemos los datos
-df = pd.read_csv('https://gist.githubusercontent.com/rgonzalezt/525494fb91010b362eceaa1d0c9368eb/raw/5d00c08c53a7e2a46c250e1b7bb27e29f9bd5c8a/ejercicios_modelo_1_11.csv')
+df = pd.read_csv('https://gist.githubusercontent.com/rgonzalezt/7b21f9909a8b52436d1d7003e04208e1/raw/51efddfaf88a16ef336c426da529094799743c15/ejercicios_modelo_12_11.csv')
 
 df = df[pd.notnull(df['tag'])]
 
@@ -49,11 +51,25 @@ df['ejercicio'] = df['ejercicio'].apply(clean_text)
 
 X = df.ejercicio
 y = df.tag
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
 
 # Modelo
-
+"""
 model = Pipeline([('vect', CountVectorizer()),
                   ('tfidf', TfidfTransformer()),
                   ('clf', MultinomialNB()),
+                  ])
+
+"""
+
+#Modelo v2
+#Import Gaussian Naive Bayes model
+from sklearn.naive_bayes import GaussianNB
+from mlxtend.preprocessing import DenseTransformer
+
+
+#Create a Gaussian Classifier
+model = Pipeline([('vect', CountVectorizer()),
+                  ('to_dense', DenseTransformer()),
+                  ('clf', GaussianNB()),
                   ])
