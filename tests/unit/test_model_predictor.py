@@ -59,9 +59,14 @@ def test_analiza_la_funcion_que_pasa_por_puntos_es_funcion_implicita_puntos(mode
 def test_indica_dominio_imagen_de_la_funcion_que_pasa_por_puntos_es_funcion_implicita_puntos(modelo):
     prediccion = modelPredictor.predict("Indicá dominio e imagen de la funcion que pasa por los puntos (1;2) y (2;1)")
     assert prediccion == "funcion-implicita-puntos"
+
 #FIXME
 def test_analiza_la_parabola_que_pasa_por_tres_puntos_es_funcion_implicita_puntos(modelo):
     prediccion = modelPredictor.predict("Analiza la parabola que pasa por los puntos (1;2), (2;4) y (3;2)")
+    assert prediccion == "funcion-implicita-puntos"
+
+def test_analiza_con_dominio_la_parabola_que_pasa_por_tres_puntos_es_funcion_implicita_puntos(modelo):
+    prediccion = modelPredictor.predict("Analiza la parabola que pasa por los puntos (1;2), (2;4) y (3;2) e indicá dominio")
     assert prediccion == "funcion-implicita-puntos"
 
 def test_analiza_la_parabola_que_pasa_por_vertice_es_funcion_implicita_vertice(modelo):
