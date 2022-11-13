@@ -6,12 +6,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.naive_bayes import GaussianNB
 from mlxtend.preprocessing import DenseTransformer
-
 nltk.download('stopwords')
 import re
 from unicodedata import normalize
-
-from bs4 import BeautifulSoup
 
 # Traemos los datos
 df = pd.read_csv('https://gist.githubusercontent.com/rgonzalezt/7b21f9909a8b52436d1d7003e04208e1/raw/51efddfaf88a16ef336c426da529094799743c15/ejercicios_modelo_12_11.csv')
@@ -28,7 +25,6 @@ def clean_text(text):
 
         return: modified initial string
     """
-    #text = BeautifulSoup(text, "lxml").text  # HTML decoding
     text = text.lower()  # lowercase text
     text = ' '.join(word for word in text.split() if word not in STOPWORDS)  # delete stopwors from text
     # -> NFD y eliminar diacríticos
