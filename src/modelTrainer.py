@@ -25,7 +25,7 @@ STOPWORDS = set(stopwords.words('spanish'))
 def clean_text(text):
     """
         text: a string
-        
+
         return: modified initial string
     """
     #text = BeautifulSoup(text, "lxml").text  # HTML decoding

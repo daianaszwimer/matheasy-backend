@@ -1,4 +1,4 @@
-# MatEasy API
+# MathEasy API
 
 How to run the app.
 
