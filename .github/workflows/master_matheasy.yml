@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'matheasy'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1CCA53F792B84FF985D516453EAE994A }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_272AC113FA0143CBAD652F4809D153FC }}
