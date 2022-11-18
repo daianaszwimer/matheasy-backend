@@ -60,7 +60,6 @@ def test_indica_dominio_imagen_de_la_funcion_que_pasa_por_puntos_es_funcion_impl
     prediccion = modelPredictor.predict("Indicá dominio e imagen de la funcion que pasa por los puntos (1;2) y (2;1)")
     assert prediccion == "funcion-implicita-puntos"
 
-#FIXME
 def test_analiza_la_parabola_que_pasa_por_tres_puntos_es_funcion_implicita_puntos(modelo):
     prediccion = modelPredictor.predict("Analiza la parabola que pasa por los puntos (1;2), (2;4) y (3;2)")
     assert prediccion == "funcion-implicita-puntos"
@@ -97,9 +96,12 @@ def test_funcion_que_pasa_por_vertice_es_funcion_implicita_vertice(modelo):
     prediccion = modelPredictor.predict("Qué función tiene su vértice en el punto (2,2) y pasa por (10,6)?")
     assert prediccion == "funcion-implicita-vertice"  
 
-#FIXME
 def test_cual_es_la_diferencia_entre_8_y_5_es_ecuacion_implicita(modelo):
     prediccion = modelPredictor.predict("Cual es la diferencia de 8 y 5?")
+    assert prediccion == "ecuacion-implicita"  
+
+def test_cual_es_la_resta_entre_8_y_5_es_ecuacion_implicita(modelo):
+    prediccion = modelPredictor.predict("Cual es la resta de 8 y 5?")
     assert prediccion == "ecuacion-implicita"  
 
 def test_f_es_igual_a_una_expresion_es_funcion_explicita(modelo):
@@ -125,3 +127,19 @@ def test_halla_conjuntos_de_funcion_cuadratica_dado_vertice_y_punto(modelo):
 def test_halla_conjuntos_de_funcion_lineal_dado_puntos(modelo):
     prediccion = modelPredictor.predict("Halla la función lineal que pasa por P = (3; -2) y Q = (2; -1). Graficala, halla ceros, o. al origen. Indica C+ y C-.")
     assert prediccion == "funcion-implicita-puntos"
+
+def test_una_ecuacion_sin_contexto_es_ecuacion_explicita(modelo):
+    prediccion = modelPredictor.predict("x*(2+x) + 4 = 10 * x")
+    assert prediccion == 'ecuacion-explicita'
+
+def test_una_ecuacion_simple_sin_contexto_es_ecuacion_explicita(modelo):
+    prediccion = modelPredictor.predict("x = 10 * x")
+    assert prediccion == 'ecuacion-explicita'
+
+def test_una_ecuacion_compleja_sin_contexto_es_ecuacion_explicita(modelo):
+    prediccion = modelPredictor.predict("-5x ^ 2 + -5x - 5 = 50")
+    assert prediccion == 'ecuacion-explicita'
+
+def test_una_ecuacion_compleja_sin_contexto_es_ecuacion_explicita(modelo):
+    prediccion = modelPredictor.predict("100 = -5x ^ 2 + -5x - 5")
+    assert prediccion == 'ecuacion-explicita'

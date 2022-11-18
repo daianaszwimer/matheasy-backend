@@ -11,7 +11,7 @@ import re
 from unicodedata import normalize
 
 # Traemos los datos
-df = pd.read_csv('https://gist.githubusercontent.com/rgonzalezt/7b21f9909a8b52436d1d7003e04208e1/raw/51efddfaf88a16ef336c426da529094799743c15/ejercicios_modelo_12_11.csv')
+df = pd.read_csv('https://gist.githubusercontent.com/rgonzalezt/17a428e2c2093c80c9cbec883ee4cf9d/raw/e5871fc94404d1815e51cd263cf4f1953219bd7d/ejercicios_modelo_18_11.csv')
 
 df = df[pd.notnull(df['tag'])]
 
@@ -26,7 +26,7 @@ def clean_text(text):
         return: modified initial string
     """
     text = text.lower()  # lowercase text
-    text = ' '.join(word for word in text.split() if word not in STOPWORDS)  # delete stopwors from text
+    #text = ' '.join(word for word in text.split() if word not in STOPWORDS)  # delete stopwors from text
     # -> NFD y eliminar diacríticos
     text = re.sub(
             r"([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+", r"\1", 
