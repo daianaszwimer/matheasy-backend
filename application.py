@@ -4,23 +4,23 @@ from flask import Flask, request, jsonify
 from src.modelTrainer import model, X_train, y_train
 from src.utils import is_valid_statement
 
-application = Flask(__name__)
-swagger = Swagger(application)
+app = Flask(__name__)
+swagger = Swagger(app)
 
 import src.service as service
 
 
-@application.before_first_request
+@app.before_first_request
 def before_first_request():
     model.fit(X_train, y_train)
 
-@application.route('/', methods=["GET"])
+@app.route('/', methods=["GET"])
 @swag_from('./config/swagger.yml')
 def helloworld():
     return jsonify('Ok!')
 
 
-@application.route('/api/math-translation', methods=["POST"])
+@app.route('/api/math-translation', methods=["POST"])
 @swag_from('./config/swagger.yml')
 def mathtranslation():
     if not request.is_json:
@@ -45,7 +45,7 @@ def mathtranslation():
         print("Error con el enunciado: ", text)
         return jsonify({"error": "An exception occurred"}), 404
 
-@application.route('/api/suggestions', methods=["POST"])
+@app.route('/api/suggestions', methods=["POST"])
 @swag_from('./config/swagger.yml')
 def suggestions():
     if not request.is_json:
