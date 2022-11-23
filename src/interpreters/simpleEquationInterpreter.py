@@ -1,7 +1,7 @@
 from src.interpreters.domain import Response
 
 # Es caracter de inicio si -> ( o { o [ o incognita o numero
-init_characters = ["-", "(", "{", "[", "x", "y", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+init_characters = ["x", "-", "(", "{", "[", "y", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 # Es caracter de fin si -> ) o }  o ] o incognita o numero
 end_characters = [")", "}", "]", "x", "y", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
@@ -27,4 +27,6 @@ def search_character(characters, statement):
 # Si viene algo como "Despeja x de tal ecuacion (...)" veo que el proximo caracter sea un caracter aceptado
 def following_characters_accepted(statement, index):
     accepted_characters = [*init_characters, *end_characters, "+", "-", "*", "/", "=", " ", ">", "<", "(", ")", "^"]
+    if index + 2 > len(statement) - 1:
+        return True
     return statement[index + 1] in accepted_characters and statement[index + 2] in accepted_characters
