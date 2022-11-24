@@ -35,8 +35,26 @@ operators_dictionary.update(third_order_operators_dictionary)
 operators_dictionary.update(operators_left_dictionary)
 operators_dictionary.update(operators_right_dictionary)
 
-math_terms = ["funcion", "dominio", "imagen", "pendiente", "vertice", "ordenada al origen", "ord al origen",
-              "ord. al origen", "o. al origen", "punto", "puntos"]
+math_terms = ["funcion", "dominio", "imagen", "pendiente", "vertice", "ordenada", "al", "origen", "ord", "punto",
+              "puntos", "todo", "esto", "ultimo"]
+
+from difflib import SequenceMatcher
+
+
+def similar(a, b):
+    return SequenceMatcher(None, a, b).ratio()
+
+
+def fix_near_operators(statement):
+    operators = list(operators_dictionary.keys()) + math_terms
+    final_statement = statement
+    statement = npl(statement)
+    for token in statement:
+        final_matches = [(k, similar(k, token.text)) for k in operators if similar(k, token.text) >= 0.8]
+        final_matches.sort(key=lambda a: a[1], reverse=True)
+        if len(final_matches) >= 1:
+            final_statement = final_statement.replace(token.text, final_matches[0][0])
+    return final_statement
 
 
 def is_valid_statement(statement):
@@ -64,14 +82,10 @@ def is_valid_statement(statement):
     for operator in math_terms:
         if operator in statement.text:
             has_any_operator = True
-        # TODO: Check numeros con coma y negativos, string is numeric?
     return has_any_num and has_any_operator
 
 
 def has_numbers(statement):
-    search_digits = re.search(r'\d', statement)
-    print("search digits")
-    print(search_digits)
     return bool(re.search(r'\d', statement))
 
 

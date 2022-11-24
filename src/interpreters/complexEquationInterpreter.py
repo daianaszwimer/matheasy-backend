@@ -5,7 +5,7 @@ from recognizers_number import recognize_number, Culture
 
 import src.interpreters.addSubstractInterpreter as addSubstractInterpreter
 from src.interpreters.domain import Response
-from src.utils import string_is_numeric, is_negative_or_float_number
+from src.utils import string_is_numeric
 
 npl = spacy.load('es_core_news_lg')
 first_order_operators_dictionary = {"mayor o igual": ">=", "menor o igual": "<=", "igual": "=", "mayor": ">",
