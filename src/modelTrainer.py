@@ -11,7 +11,7 @@ import re
 from unicodedata import normalize
 
 # Traemos los datos
-df = pd.read_csv('https://gist.githubusercontent.com/rgonzalezt/17a428e2c2093c80c9cbec883ee4cf9d/raw/e5871fc94404d1815e51cd263cf4f1953219bd7d/ejercicios_modelo_18_11.csv')
+df = pd.read_csv('https://gist.githubusercontent.com/rgonzalezt/5441c29e680d92b6f717aead7cc25b73/raw/83afafe5ece6cce14f5595b81eb05960075faac3/ejercicios_modelo_24_11.csv')
 
 df = df[pd.notnull(df['tag'])]
 
