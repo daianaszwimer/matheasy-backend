@@ -131,5 +131,7 @@ def get_exponent_of_equation(equation):
         return Exponent.TWO
     if "^3" in equation:
         return Exponent.THREE
+    if "^4" in equation:
+        return Exponent.FOUR
     else:
         return Exponent.ONE
