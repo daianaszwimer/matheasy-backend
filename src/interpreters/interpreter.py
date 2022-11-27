@@ -1,5 +1,3 @@
-import unidecode
-
 import src.interpreters.complexEquationInterpreter as complexEquationInterpreter
 import src.interpreters.complexFunctionPointsInterpreter as complexFunctionPointsInterpreter
 import src.interpreters.complexFunctionSlopeInterceptInterpreter as complexFunctionSlopeInterceptInterpreter
@@ -9,7 +7,6 @@ from src.interpreters.domain import Response
 
 
 def interpret(prediction, statement):
-    statement = unidecode.unidecode(statement)
     if prediction == "suma" or prediction == "resta":
         return simpleEquationInterpreter.translate_statement(statement, "Equation")
     if prediction == "ecuacion-explicita":
