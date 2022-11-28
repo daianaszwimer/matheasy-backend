@@ -19,10 +19,16 @@ def suggestions(equation, tag):
     root = get_root_of_equation(equation)
     exponent = get_exponent_of_equation(equation).value
     exerciselist = []
+    exerciseqty = 3
 
     # Number of exercises to generate
-    for _ in range(3):
+    for _ in range(exerciseqty):
         similarexercise = mathgenerator.generate_exercise(exponent, tag).replace("=", root)
+        if similarexercise in exerciselist:
+            retry = 0
+            while similarexercise in exerciselist and retry < 3:
+                similarexercise = mathgenerator.generate_exercise(exponent, tag).replace("=", root)
+                retry += 1
         exerciselist.append(similarexercise)
 
     return exerciselist
