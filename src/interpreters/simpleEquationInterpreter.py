@@ -1,8 +1,8 @@
 from src.interpreters.domain import Response
 
-# Es caracter de inicio si -> ( o { o [ o incognita o numero
+# Es caracter de inicio si es -> ( o { o [ o incognita o numero
 init_characters = ["x", "-", "(", "{", "[", "y", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-# Es caracter de fin si -> ) o }  o ] o incognita o numero
+# Es caracter de fin si es -> ) o }  o ] o incognita o numero
 end_characters = [")", "}", "]", "x", "y", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 
