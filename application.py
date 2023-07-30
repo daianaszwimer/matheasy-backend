@@ -31,7 +31,6 @@ def mathtranslation():
     text = input_json['text']
     # FIXME
     if not is_valid_statement(text):
-        print("ES ENUNCIADO VALIDO?") # FIXME: BOrrar
         print(is_valid_statement(text))
         return jsonify({"error": "Invalid input - A mathematical statement is required"}), 400
 
