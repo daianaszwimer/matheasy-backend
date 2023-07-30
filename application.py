@@ -1,3 +1,5 @@
+import os
+
 from flasgger import swag_from, Swagger
 from flask import Flask, request, jsonify
 
@@ -9,12 +11,17 @@ swagger = Swagger(app)
 
 import src.service as service
 
+host = '0.0.0.0'
+port = int(os.environ.get('PORT', 80))
+
 if __name__ == 'application':
-    app.run(port=8000)
+    app.run(host=host, port=port)
+
 
 @app.before_first_request
 def before_first_request():
     model.fit(X_train, y_train)
+
 
 @app.route('/', methods=["GET"])
 @swag_from('./config/swagger.yml')
@@ -45,6 +52,7 @@ def mathtranslation():
     except:
         print("Error con el enunciado: ", text)
         return jsonify({"error": "An exception occurred"}), 404
+
 
 @app.route('/api/suggestions', methods=["POST"])
 @swag_from('./config/swagger.yml')
