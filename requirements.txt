@@ -15,7 +15,6 @@ emoji==1.7.0
 en-trf-xlnetbasecased-lg @ https://github.com/explosion/spacy-models/releases/download/en_trf_xlnetbasecased_lg-2.2.0/en_trf_xlnetbasecased_lg-2.2.0.tar.gz
 es-core-news-lg @ https://github.com/explosion/spacy-models/releases/download/es_core_news_lg-3.3.0/es_core_news_lg-3.3.0-py3-none-any.whl
 filelock==3.7.1
-flasgger==0.9.5
 Flask==2.1.2
 html5lib==1.1
 huggingface-hub==0.8.1
