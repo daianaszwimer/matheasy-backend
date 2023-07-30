@@ -9,7 +9,7 @@ swagger = Swagger(app)
 
 import src.service as service
 
-if __name__ == '__main__':
+if __name__ == 'application':
     app.run(port=8000)
 
 @app.before_first_request
