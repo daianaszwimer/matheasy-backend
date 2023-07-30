@@ -34,7 +34,7 @@ mistune==2.0.3
 mlxtend==0.14.0
 multipledispatch==0.6.0
 murmurhash==1.0.7
-nltk==3.7
+nltk==3.8.1
 numpy==1.23.1
 packaging==21.3
 pandas==1.4.3
