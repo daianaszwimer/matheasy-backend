@@ -1,11 +1,9 @@
-from flasgger import swag_from, Swagger
 from flask import Flask, request, jsonify
 
 from src.modelTrainer import model, X_train, y_train
 from src.utils import is_valid_statement
 
 app = Flask(__name__)
-swagger = Swagger(app)
 
 import src.service as service
 
@@ -16,13 +14,11 @@ def before_first_request():
 
 
 @app.route('/', methods=["GET"])
-@swag_from('./config/swagger.yml')
 def helloworld():
     return jsonify('Ok!')
 
 
 @app.route('/api/math-translation', methods=["POST"])
-@swag_from('./config/swagger.yml')
 def mathtranslation():
     if not request.is_json:
         return jsonify({"error": "Missing JSON in request"}), 400
@@ -47,7 +43,6 @@ def mathtranslation():
 
 
 @app.route('/api/suggestions', methods=["POST"])
-@swag_from('./config/swagger.yml')
 def suggestions():
     if not request.is_json:
         return jsonify({"error": "Missing JSON in request"}), 400
