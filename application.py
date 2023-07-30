@@ -1,5 +1,3 @@
-import os
-
 from flasgger import swag_from, Swagger
 from flask import Flask, request, jsonify
 
@@ -10,12 +8,6 @@ app = Flask(__name__)
 swagger = Swagger(app)
 
 import src.service as service
-
-host = '0.0.0.0'
-port = int(os.environ.get('PORT', 80))
-
-if __name__ == 'application':
-    app.run(host=host, port=port)
 
 
 @app.before_first_request
